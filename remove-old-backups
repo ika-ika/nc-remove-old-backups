@@ -2,7 +2,7 @@
 # This script removes the oldest backups if the free disk space is running low.
 
 DIR=/home/ika/backup	# backup directory
-THRESHOLD=70		# percent of busy disk space above which the script removes oldest backups
+THRESHOLD=$1		# percent of busy disk space above which the script removes oldest backups
 
 cd $DIR
 while true
