@@ -1,0 +1,23 @@
+#!/bin/bash
+# This script removes the oldest backups if the free disk space is running low.
+
+DIR=/home/ika/backup	# backup directory
+THRESHOLD=70		# percent of busy disk space above which the script removes oldest backups
+
+cd $DIR
+while true
+do
+	SPACE_USED=$(df /dev/mapper/vg-root --output=pcent /dev/mapper/vg-root | tail -n 1 | cut -d"%" -f 1)
+	OLDEST_BACKUP=$(ls -t | tail -n 1)
+
+	if (( $SPACE_USED > $THRESHOLD ))	# is there less free space than $THRESHOLD percent?
+	then
+		echo ":: Diskspace used: $SPACE_USED percent"
+		echo ":: Deleting $OLDEST_BACKUP"
+		rm $OLDEST_BACKUP
+	else
+		echo ":: Free diskspace: $SPACE_USED"
+		echo ":: There is enough space for another backup, exiting."
+		exit 0
+	fi
+done
